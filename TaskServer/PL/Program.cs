@@ -1,10 +1,12 @@
 using DAL.Context;
 using Microsoft.EntityFrameworkCore;
 using PL.Extensions;
+using PL.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+builder.Services.AddSignalR();
 
 builder.Services.AddCors(options =>
 {
@@ -34,14 +36,19 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseRouting();
 
 app.UseHttpsRedirection();
-
-app.UseCors("MyCorsPolicy");
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
+app.UseCors("MyCorsPolicy");
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+    endpoints.MapHub<TaskHub>("/tasks");
+});
 
 app.Run();

@@ -4,9 +4,9 @@ using BLL.Services;
 using BLL.Services.Contracts;
 using BLL.Validators;
 using BLL.Validators.Contracts;
-using DAL.Models;
 using DAL.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -31,7 +31,31 @@ namespace PL.Extensions
                             Encoding.UTF8.GetBytes(configuration["Auth:Secret"])),
                         RequireExpirationTime = true
                     };
+
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            var accessToken = context.Request.Query["token"];
+
+                            if (!string.IsNullOrWhiteSpace(accessToken) &&
+                                context.Request.Path.StartsWithSegments("/tasks"))
+                            {
+                                context.Token = accessToken;
+                            }
+
+                            return Task.CompletedTask;
+                        }
+                    };
                 });
+
+            services.AddAuthorization(options =>
+            {
+                options.DefaultPolicy = new AuthorizationPolicyBuilder()
+                    .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                    .RequireAuthenticatedUser()
+                    .Build();
+            });
         }
 
         public static void AddServices(this IServiceCollection services)
@@ -44,9 +68,9 @@ namespace PL.Extensions
             services.AddScoped<IEmailValidator, EmailValidator>();
 
             //Repositories
-            services.AddScoped<IRepository<User>, Repository<User>>();
+            services.AddScoped<IRepository<DAL.Models.User>, Repository<DAL.Models.User>>();
             services.AddScoped<IRepository<DAL.Models.Task>, Repository<DAL.Models.Task>>();
-            services.AddScoped<IRepository<Comment>, Repository<Comment>>();
+            services.AddScoped<IRepository<DAL.Models.Comment>, Repository<DAL.Models.Comment>>();
 
             //Services
             services.AddScoped<IUserService, UserService>();

@@ -23,6 +23,7 @@ namespace BLL.Services
             var taskToAdd = _mapper.Map<DAL.Models.Task>(task);
 
             taskToAdd.CreatedAt = DateTime.Now;
+            taskToAdd.IsCompleted = false;
 
             var addedTask = await _taskRepository.AddAsync(taskToAdd);
             await _taskRepository.SaveChangesAsync();
