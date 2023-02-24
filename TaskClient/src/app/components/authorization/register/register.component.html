@@ -1,3 +1,41 @@
-<p>
-  register works!
-</p>
+<main class="register">
+  <div class="register__container">
+      <div class="register__form">
+          <div class="register__header">
+              <h2>Get started</h2>
+          </div>
+          <form class="form" [formGroup]="registerForm">
+              <div [ngClass]="getClass(userName)">
+                <label>User name</label>
+                <input type="text" placeholder="Your name" formControlName="userName">
+              </div>
+
+              <div [ngClass]="getClass(email)">
+                  <label>E-mail</label>
+                  <input type="email" placeholder="Your email" formControlName="email">
+              </div>
+
+              <div [ngClass]="getClass(password)">
+                  <label>Password</label>
+                  <input type="password" placeholder="Password" formControlName="password">
+                  <div class="error-text" *ngIf="password.hasError('passwordStrength')">
+                    {{password.getError('passwordStrength')}}
+                  </div>
+              </div>
+
+              <div [ngClass]="getClass(confirmPassword)">
+                <label>Password</label>
+                <input type="password" placeholder="Confirm password" formControlName="confirmPassword">
+                <div class="error-text" *ngIf="passwordMatchError">
+                  Password does not match
+                </div>
+            </div>
+              <button class="form__button" (click)="register()">Sign up</button>
+          </form>
+          <div class="main__account">
+              <p>Already have an account?</p>
+              <a href="/" class="main__link">Log in</a>
+          </div>
+      </div>
+  </div>
+</main>

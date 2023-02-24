@@ -48,6 +48,5 @@ export class LoginComponent implements OnInit {
           res => console.log(res)
         );
     }
-
   }
 }
