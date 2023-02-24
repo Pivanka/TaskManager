@@ -16,7 +16,7 @@ namespace PL.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterDto model)
+        public async Task<ActionResult<string>> Register([FromBody] RegisterDto model)
         {
             var result = await _userService.RegisterUserAsync(model);
 
@@ -24,7 +24,7 @@ namespace PL.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginDto model)
+        public async Task<ActionResult<string>> Login([FromBody] LoginDto model)
         {
             var result = await _userService.LoginUserAsync(model);
 

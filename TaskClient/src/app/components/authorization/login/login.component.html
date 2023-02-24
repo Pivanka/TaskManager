@@ -1,0 +1,25 @@
+<main class="login">
+  <div class="login__container">
+      <div class="login__form">
+          <div class="login__header">
+              <h2>Welcome back</h2>
+          </div>
+          <form class="form" [formGroup]="loginForm">
+              <div class="form-control">
+                  <label>E-mail</label>
+                  <input type="email" placeholder="Your email" formControlName="email">
+              </div>
+
+              <div class="form-control">
+                  <label>Password</label>
+                  <input type="password" placeholder="Password" formControlName="password">
+              </div>
+              <button class="form__button" (click)="login()">Sign in</button>
+          </form>
+          <div class="main__account">
+              <p>Don't have an account?</p>
+              <a href="/register" class="main__link">Sign up</a>
+          </div>
+      </div>
+  </div>
+</main>
